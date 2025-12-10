@@ -1,4 +1,0 @@
-# Notebook
-
-## Loading Environment Variables
-
