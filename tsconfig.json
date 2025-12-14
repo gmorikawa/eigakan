@@ -2,14 +2,22 @@
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
     // File Layout
-    // "rootDir": "./src",
+    "rootDir": "./src",
     // "outDir": "./dist",
+    "baseUrl": "./src",
+    "paths": {
+      "@application/*": ["./application/*"],
+      "@features/*": ["./features/*"],
+      "@shared/*": ["./shared/*"],
+      "@/*": ["*"]
+    },
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
     "module": "nodenext",
     "target": "esnext",
     "types": [],
+    "moduleResolution": "nodenext",
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
@@ -40,5 +48,6 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-  }
+  },
+  "include": ["src/**/*"]
 }
