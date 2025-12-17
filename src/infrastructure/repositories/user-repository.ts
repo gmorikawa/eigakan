@@ -1,38 +1,79 @@
-import { Client } from "pg";
-
 import type { ID } from "@shared/types/id.js";
 
 import type { NewUser, User } from "@features/user/entity.js";
 import type { UserRepository } from "@features/user/repository.js";
 
 import type { UserRole, UserStatus } from "@features/user/enums.js";
+import { Component } from "@infrastructure/dependency-container/component.js";
+import type { DatabaseClient } from "@infrastructure/database/client.js";
 
+@Component({
+    name: "UserRepository",
+    dependencies: ["DatabaseClient"]
+})
 export class PostgresUserRepository implements UserRepository {
-
     constructor(
-        private readonly client: Client
+        private readonly client: DatabaseClient
     ) { }
 
     public async getAll(): Promise<User[]> {
-        return [];
+        const query = "SELECT * FROM application.users;";
+
+        return this.client.query(query)
+            .then((values: any[]) => {
+                return values.map((value) => this.mapToEntity(value));
+            });
     }
 
     public async getById(id: ID): Promise<User | null> {
-        return null;
+        const query = "SELECT * FROM application.users WHERE id = $1;";
+        const params = [id];
+
+        return this.client.query(query, params)
+            .then((values: any[]) => {
+                const user = values?.shift();
+                return user ? this.mapToEntity(user) : null;
+            });
     }
 
     public async create(user: NewUser): Promise<User> {
-        return {} as User;
+        const query = "INSERT INTO application.users (username, password, email, role, status, fullname) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *";
+        const params = [user.username, user.password, user.email, user.role as UserRole, user.status as UserStatus, user.fullname];
+
+        return this.client.query(query, params)
+            .then((value: any) => {
+                return value?.shift() as User;
+            });
     }
 
     public async update(id: ID, user: Partial<NewUser>): Promise<User | null> {
-        return null;
+        const query = "UPDATE application.users SET username = $1, password = $2, email = $3, role = $4, status = $5, fullname = $6 WHERE id = $7 RETURNING *";
+        const params = [user.username, user.password, user.email, user.role as UserRole, user.status as UserStatus, user.fullname, id];
+
+        return this.client.query(query, params)
+            .then((value: any) => {
+                return value?.shift() as User;
+            });
     }
 
     public async delete(id: ID): Promise<boolean> {
-        return false;
+        const query = "DELETE FROM application.users WHERE id = $1;";
+        const params = [id];
+
+        return this.client.query(query, params)
+            .then(() => true)
+            .catch(() => false);
     }
 
-    // private mapToEntity(user: any): User {
-    // }
+    private mapToEntity(user: any): User {
+        return {
+            id: user.id,
+            username: user.username,
+            password: user.password,
+            email: user.email,
+            role: user.role as UserRole,
+            status: user.status as UserStatus,
+            fullname: user.fullname
+        };
+    }
 }

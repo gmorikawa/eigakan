@@ -5,6 +5,6 @@ export interface UserRepository {
     getAll(): Promise<User[]>;
     getById(id: ID): Promise<User | null>;
     create(user: NewUser): Promise<User>;
-    update(id: ID, user: Partial<NewUser>): Promise<User | null>;
+    update(id: ID, user: User): Promise<User | null>;
     delete(id: ID): Promise<boolean>;
 }

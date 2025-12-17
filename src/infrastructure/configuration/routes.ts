@@ -3,19 +3,12 @@ import type Fastify from "fastify";
 import { UserController } from "@application/rest/controllers/user-controller.js";
 import { UserService } from "@features/user/service.js";
 import { PostgresUserRepository } from "@infrastructure/repositories/user-repository.js";
-import { Client } from "pg";
-import { Environment } from "./environment.js";
 import type { FastifyReply, FastifyRequest } from "fastify";
+import { DependencyManager } from "@infrastructure/dependency-container/manager.js";
+import type { DatabaseClient } from "@infrastructure/database/client.js";
 
 export async function initRoutes(app: ReturnType<typeof Fastify>) {
-    const client = new Client({
-        host: Environment.DATABASE_HOST,
-        port: Environment.DATABASE_PORT,
-        user: Environment.DATABASE_USER,
-        password: Environment.DATABASE_PASSWORD,
-        database: Environment.DATABASE_NAME
-    });
-
+    const client = DependencyManager.resolve<DatabaseClient>("DatabaseClient");
     const repository = new PostgresUserRepository(client);
     const service = new UserService(repository);
     const controller = new UserController(service);

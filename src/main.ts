@@ -1,10 +1,5 @@
 import Fastify from "fastify";
-import type { FastifyRequest, FastifyReply } from "fastify";
 import type { Server } from "@/shared/types/server.js";
-
-import { UserController } from "@application/rest/controllers/user-controller.js";
-import { UserService } from "@features/user/service.js";
-import { PostgresUserRepository } from "@infrastructure/repositories/user-repository.js";
 
 import { initDatabase } from "@infrastructure/configuration/database.js";
 import { initMigrations } from "@infrastructure/configuration/migration.js";

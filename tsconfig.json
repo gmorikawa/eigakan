@@ -49,6 +49,8 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
+
+    "experimentalDecorators": false,
   },
   "include": ["src/**/*"]
 }
