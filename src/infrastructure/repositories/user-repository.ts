@@ -16,7 +16,7 @@ export class PostgresUserRepository implements UserRepository {
         private readonly client: DatabaseClient
     ) { }
 
-    public async getAll(): Promise<User[]> {
+    public async findAll(): Promise<User[]> {
         const query = "SELECT * FROM application.users;";
 
         return this.client.query(query)
@@ -25,9 +25,31 @@ export class PostgresUserRepository implements UserRepository {
             });
     }
 
-    public async getById(id: ID): Promise<User | null> {
+    public async findById(id: ID): Promise<User | null> {
         const query = "SELECT * FROM application.users WHERE id = $1;";
         const params = [id];
+
+        return this.client.query(query, params)
+            .then((values: any[]) => {
+                const user = values?.shift();
+                return user ? this.mapToEntity(user) : null;
+            });
+    }
+
+    public async findByUsername(username: string): Promise<User | null> {
+        const query = "SELECT * FROM application.users WHERE username = $1;";
+        const params = [username];
+
+        return this.client.query(query, params)
+            .then((values: any[]) => {
+                const user = values?.shift();
+                return user ? this.mapToEntity(user) : null;
+            });
+    }
+
+    public async findByEmail(email: string): Promise<User | null> {
+        const query = "SELECT * FROM application.users WHERE email = $1;";
+        const params = [email];
 
         return this.client.query(query, params)
             .then((values: any[]) => {
