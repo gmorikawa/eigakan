@@ -1,14 +1,13 @@
-import { Environment } from "@infrastructure/configuration/environment.js";
+import { Environment } from "@application/configuration/environment.js";
 import type { DatabaseClient } from "@infrastructure/database/client.js";
 import { PostgresClient } from "@infrastructure/database/postgres/client.js";
-import { DependencyManager } from "@infrastructure/dependency-container/manager.js";
 
 async function createSchemas(client: PostgresClient) {
     await client.query("CREATE SCHEMA IF NOT EXISTS configuration;");
     await client.query("CREATE SCHEMA IF NOT EXISTS application;");
 }
 
-export async function initDatabase() {
+export async function initDatabase(): Promise<DatabaseClient> {
     const client = new PostgresClient(
         Environment.DATABASE_HOST,
         Environment.DATABASE_PORT,
@@ -19,7 +18,6 @@ export async function initDatabase() {
 
     await client.connect();
     await createSchemas(client);
-    // await client.disconnect();
 
-    DependencyManager.use<DatabaseClient>("DatabaseClient", PostgresClient, client);
+    return client;
 }

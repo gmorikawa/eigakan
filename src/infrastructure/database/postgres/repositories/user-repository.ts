@@ -4,13 +4,8 @@ import type { NewUser, User } from "@features/user/entity.js";
 import type { UserRepository } from "@features/user/repository.js";
 
 import type { UserRole, UserStatus } from "@features/user/enums.js";
-import { Component } from "@infrastructure/dependency-container/component.js";
 import type { DatabaseClient } from "@infrastructure/database/client.js";
 
-@Component({
-    name: "UserRepository",
-    dependencies: ["DatabaseClient"]
-})
 export class PostgresUserRepository implements UserRepository {
     constructor(
         private readonly client: DatabaseClient

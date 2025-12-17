@@ -2,9 +2,8 @@ import fs from "node:fs";
 import path from "node:path";
 
 import type { DatabaseClient } from "@infrastructure/database/client.js";
-import { DependencyManager } from "@infrastructure/dependency-container/manager.js";
 
-const basePath = path.resolve(import.meta.dirname, "../database/postgres/migrations");
+const basePath = path.resolve(import.meta.dirname, "../../infrastructure/database/postgres/migrations");
 
 async function executeMigration(client: DatabaseClient, migrationName: string) {
     const sql = fs.readFileSync(path.resolve(basePath, migrationName), 'utf8');
@@ -26,14 +25,12 @@ async function createMigrationsTable(client: DatabaseClient) {
     return client.query("CREATE TABLE IF NOT EXISTS configuration.migrations (number INT PRIMARY KEY, name TEXT NOT NULL, executed_at TIMESTAMP NOT NULL DEFAULT NOW());");
 }
 
-export async function initMigrations() {
+export async function initMigrations(database: DatabaseClient) {
     const migrations = fs.readdirSync(basePath);
 
-    const client = DependencyManager.resolve<DatabaseClient>("DatabaseClient");
-
-    await createMigrationsTable(client);
+    await createMigrationsTable(database);
 
     for (const migration of migrations) {
-        await executeMigration(client, migration);
+        await executeMigration(database, migration);
     }
 }
