@@ -1,0 +1,11 @@
+import "dotenv/config";
+console.info("Environment variables loaded from .env file");
+
+export const Environment = Object.freeze({
+    DATABASE_ADAPTER: process.env.DATABASE_ADAPTER ?? "postgres",
+    DATABASE_HOST: process.env.DATABASE_HOST ?? "localhost",
+    DATABASE_PORT: Number(process.env.DATABASE_PORT) ?? 3010,
+    DATABASE_USER: process.env.DATABASE_USER ?? "",
+    DATABASE_PASSWORD: process.env.DATABASE_PASSWORD ?? "",
+    DATABASE_NAME: process.env.DATABASE_NAME ?? ""
+});

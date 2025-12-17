@@ -1,22 +1,29 @@
+import type { UserService } from "@features/user/service.js";
+
 export class UserController {
-    async getAll() {
-        return { message: 'List of users' };
+
+    constructor(
+        private service: UserService
+    ) { }
+
+    public async getAll() {
+        return this.service.getAll();
     }
 
-    async getById(id: string) {
-        return `getById: ${id}`;
+    public async getById(id: string) {
+        return this.service.getById(id);
     }
 
-    async create(data: any) {
-        return `create: ${JSON.stringify(data)}`;
+    public async create(data: any) {
+        return this.service.create(data);
     }
 
-    async update(id: string, data: any) {
-        return `update: ${id}, ${JSON.stringify(data)}`;
+    public async update(id: string, data: any) {
+        return this.service.update(id, data);
     }
 
-    async delete(id: string) {
-        return `delete: ${id}`;
+    public async delete(id: string) {
+        return this.service.delete(id);
     }
 }
 
