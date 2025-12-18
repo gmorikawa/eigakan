@@ -1,7 +1,15 @@
+import { AuthController } from "@application/controllers/auth-controller.js";
 import { UserController } from "@application/controllers/user-controller.js";
 import { Application } from "@application/index.js";
 
 import type { Server } from "@application/index.js";
+
+function buildAuthRoutes(app: Server) {
+    const controller = new AuthController(Application.database);
+
+    app.post("/api/auth/first-access", controller.firstAccess.bind(controller));
+    app.post("/api/auth/login", controller.login.bind(controller));
+}
 
 function buildUserRoutes(app: Server) {
     const controller = new UserController(Application.database);
@@ -14,5 +22,6 @@ function buildUserRoutes(app: Server) {
 }
 
 export async function initRoutes(app: Server) {
+    buildAuthRoutes(app);
     buildUserRoutes(app);
 }

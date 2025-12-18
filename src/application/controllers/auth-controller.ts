@@ -11,15 +11,20 @@ import { UserService } from "@features/user/service.js";
 import { AuthService } from "@features/authentication/service.js";
 
 export class AuthController {
-    private userService: UserService;
     private authService: AuthService;
 
     constructor(database: DatabaseClient) {
         const repository = new PostgresUserRepository(database);
         const passwordHasher = new BcryptPasswordHasher();
         const tokenGenerator = new JwtTokenGenerator();
-        this.userService = new UserService(repository);
-        this.authService = new AuthService(this.userService, passwordHasher, tokenGenerator);
+        this.authService = new AuthService(repository, passwordHasher, tokenGenerator);
+    }
+
+    public async firstAccess(request: Request, response: Response) {
+        const user = request.body;
+
+        const newUser = await this.authService.createAdminUser(user);
+        response.send(JSON.stringify(newUser));
     }
 
     public async login(request: Request, response: Response) {

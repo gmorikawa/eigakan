@@ -1,3 +1,7 @@
 import express from "express";
 
-export type Request<T extends Object = any> = express.Request<T>;
+import type { LoggedUser } from "@features/user/entity.js";
+
+export interface Request<T extends Object = any> extends express.Request<T> {
+    user?: LoggedUser;
+}
