@@ -1,3 +1,3 @@
-import type { FastifyRequest } from "fastify";
+import express from "express";
 
-export type Request<T extends Object = any> = FastifyRequest<T>;
+export type Request<T extends Object = any> = express.Request<T>;

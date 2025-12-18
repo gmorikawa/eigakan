@@ -20,7 +20,7 @@ export class UserController {
         response.send(JSON.stringify(users));
     }
 
-    public async getById(request: Request<{ Params: { id: string } }>, response: Response) {
+    public async getById(request: Request, response: Response) {
         const { id } = request.params;
 
         const user = await this.service.getById(id);
@@ -34,7 +34,7 @@ export class UserController {
         response.send(JSON.stringify(newUser));
     }
 
-    public async update(request: Request<{ Params: { id: string }; Body: User }>, response: Response) {
+    public async update(request: Request, response: Response) {
         const { id } = request.params;
         const user = request.body;
 
@@ -42,7 +42,7 @@ export class UserController {
         response.send(JSON.stringify(updatedUser));
     }
 
-    public async delete(request: Request<{ Params: { id: string } }>, response: Response) {
+    public async delete(request: Request, response: Response) {
         const { id } = request.params;
 
         const result = await this.service.delete(id);

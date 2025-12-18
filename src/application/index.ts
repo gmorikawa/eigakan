@@ -3,9 +3,9 @@ import { initMigrations } from "@application/configuration/migration.js";
 import { initRoutes } from "@application/configuration/routes.js";
 import type { DatabaseClient } from "@infrastructure/database/client.js";
 
-import Fastify from "fastify";
+import express from "express";
 
-export type Server = Fastify.FastifyInstance;
+export type Server = express.Application;
 
 export class Application {
     private static _app: Server;
@@ -20,19 +20,15 @@ export class Application {
     }
 
     static async run(): Promise<void> {
-        this._app = Fastify({
-            logger: true
-        });
+        this._app = express();
 
         this._database = await initDatabase();
         await initMigrations(this._database);
         await initRoutes(this._app);
 
-        this._app.listen({ port: 3020 }, (err, address) => {
-            if (err) {
-                this._app.log.error(err);
-                process.exit(1);
-            }
+        const port = 3020;
+        this._app.listen(port, () => {
+            console.log(`Example app listening on port ${port}`)
         });
     }
 }

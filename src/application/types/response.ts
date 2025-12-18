@@ -1,3 +1,3 @@
-import type { FastifyReply } from "fastify";
+import express from "express";
 
-export type Response = FastifyReply;
+export type Response = express.Response;

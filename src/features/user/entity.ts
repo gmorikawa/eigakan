@@ -11,4 +11,6 @@ export interface User {
     fullname: string;
 }
 
+
 export type NewUser = Omit<User, "id">;
+export type LoggedUser = Omit<User, "password">;

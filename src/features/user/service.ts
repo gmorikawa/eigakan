@@ -18,6 +18,14 @@ export class UserService {
         return this.repository.findById(id);
     }
 
+    public async getByUsername(username: string) {
+        return this.repository.findByUsername(username);
+    }
+
+    public async getByEmail(email: string) {
+        return this.repository.findByEmail(email);
+    }
+
     public async create(data: NewUser) {
         await this.ensureUsernameIsUnique(data.username);
         await this.ensureEmailIsUnique(data.email);
