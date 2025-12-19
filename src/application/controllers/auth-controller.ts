@@ -7,7 +7,6 @@ import { BcryptPasswordHasher } from "@infrastructure/password-hasher/bcrypt.js"
 import { JwtTokenGenerator } from "@infrastructure/token-generator/jwt.js";
 import { PostgresUserRepository } from "@infrastructure/database/postgres/repositories/user-repository.js";
 
-import { UserService } from "@features/user/service.js";
 import { AuthService } from "@features/authentication/service.js";
 
 export class AuthController {
@@ -32,7 +31,7 @@ export class AuthController {
 
         const secretKey = Environment.TOKEN_SECRET_KEY;
 
-        const token = await this.authService.authenticate(username, password, secretKey);
-        response.send(JSON.stringify({ token }));
+        const authentication = await this.authService.authenticate(username, password, secretKey);
+        response.send(JSON.stringify(authentication));
     }
 }

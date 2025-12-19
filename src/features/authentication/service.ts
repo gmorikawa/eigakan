@@ -42,6 +42,8 @@ export class AuthService {
             fullname: user.fullname
         };
 
-        return this.tokenGenerator.issue<LoggedUser>(loggedUser, secretKey, "7d");
+        const token = await this.tokenGenerator.issue<LoggedUser>(loggedUser, secretKey, "7d");
+
+        return { loggedUser, token };
     }
 }

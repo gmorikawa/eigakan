@@ -19,14 +19,14 @@ export async function authentication(request: Request, response: Response, next:
         return;
     }
 
-    if (!request.headers["Authorization"]) {
+    if (!request.headers["authorization"]) {
         response.statusCode = 401;
         response.send(JSON.stringify({ error: "Unauthorized" }));
         return;
     }
 
     try {
-        const token = request.headers["Authorization"] as Token;
+        const token = request.headers["authorization"] as Token;
         const secretKey = Environment.TOKEN_SECRET_KEY;
         const tokenGenerator = new JwtTokenGenerator();
         const payload = await tokenGenerator.verify<LoggedUser>(token, secretKey);
