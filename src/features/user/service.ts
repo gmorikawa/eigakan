@@ -6,7 +6,7 @@ import type { LoggedUser, NewUser, User } from "@features/user/entity.js";
 import type { UserRepository } from "@features/user/repository.js";
 import { UnauthorizedAccessError } from "@features/authentication/exceptions.js";
 import { UserRole } from "@features/user/enums.js";
-import { DuplicateEmailError } from "@features/user/exceptions.js";
+import { DuplicateEmailError, DuplicateUsernameError } from "@features/user/exceptions.js";
 
 export class UserService {
     constructor(
@@ -48,8 +48,8 @@ export class UserService {
             throw new UnauthorizedAccessError("It is not allowed to update other users' information.");
         }
 
-        await this.ensureUsernameIsUnique(data.username);
-        await this.ensureEmailIsUnique(data.email);
+        await this.ensureUsernameIsUnique(data.username, [id]);
+        await this.ensureEmailIsUnique(data.email, [id]);
 
         const existingUser = await this.repository.findById(id);
 
@@ -71,19 +71,19 @@ export class UserService {
         return this.repository.delete(id);
     }
 
-    private async ensureEmailIsUnique(email: string) {
-        const existingUser = await this.repository.findByEmail(email);
+    private async ensureEmailIsUnique(email: string, excludeIds?: ID[]) {
+        const existingUser = await this.repository.findByEmail(email, excludeIds);
 
         if (existingUser) {
             throw new DuplicateEmailError(email);
         }
     }
 
-    private async ensureUsernameIsUnique(username: string) {
-        const existingUser = await this.repository.findByUsername(username);
+    private async ensureUsernameIsUnique(username: string, excludeIds?: ID[]) {
+        const existingUser = await this.repository.findByUsername(username, excludeIds);
 
         if (existingUser) {
-            throw new DuplicateEmailError(username);
+            throw new DuplicateUsernameError(username);
         }
     }
 }

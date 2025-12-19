@@ -31,9 +31,11 @@ export class PostgresUserRepository implements UserRepository {
             });
     }
 
-    public async findByUsername(username: string): Promise<User | null> {
-        const query = "SELECT * FROM application.users WHERE username = $1;";
-        const params = [username];
+    public async findByUsername(username: string, excludeIds?: ID[]): Promise<User | null> {
+        const query = excludeIds && excludeIds.length > 0
+            ? `SELECT * FROM application.users WHERE username = $1 AND id NOT IN (${excludeIds.map((id, index) => `$${index + 2}`).join(", ")});`
+            : "SELECT * FROM application.users WHERE username = $1;";
+        const params = [username, ...(excludeIds || [])];
 
         return this.client.query(query, params)
             .then((values: any[]) => {
@@ -42,9 +44,11 @@ export class PostgresUserRepository implements UserRepository {
             });
     }
 
-    public async findByEmail(email: string): Promise<User | null> {
-        const query = "SELECT * FROM application.users WHERE email = $1;";
-        const params = [email];
+    public async findByEmail(email: string, excludeIds?: ID[]): Promise<User | null> {
+        const query = excludeIds && excludeIds.length > 0
+            ? `SELECT * FROM application.users WHERE email = $1 AND id NOT IN (${excludeIds.map((id, index) => `$${index + 2}`).join(", ")});`
+            : "SELECT * FROM application.users WHERE email = $1;";
+        const params = [email, ...(excludeIds || [])];
 
         return this.client.query(query, params)
             .then((values: any[]) => {
