@@ -1,10 +1,12 @@
+import express from "express";
+
 import { initDatabase } from "@application/configuration/database.js";
 import { initMigrations } from "@application/configuration/migration.js";
 import { initRoutes } from "@application/configuration/routes.js";
-import type { DatabaseClient } from "@infrastructure/database/client.js";
+import { authentication } from "@application/middlewares/authentication.js";
+import { cors } from "@application/middlewares/cors.js";
 
-import express from "express";
-import { authentication } from "./middlewares/authentication.js";
+import type { DatabaseClient } from "@infrastructure/database/client.js";
 
 export type Server = express.Application;
 
@@ -23,6 +25,7 @@ export class Application {
     static async run(): Promise<void> {
         this._app = express();
 
+        this._app.use(cors);
         this._app.use(authentication);
         this._app.use(express.json());
         this._app.use(express.urlencoded({ extended: true }));
