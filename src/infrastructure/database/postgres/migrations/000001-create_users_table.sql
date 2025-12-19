@@ -11,5 +11,3 @@ CREATE TABLE application.users (
     fullname VARCHAR(127) NOT NULL
 );
 
-CREATE INDEX inx_users_username ON application.users(username);
-CREATE INDEX inx_users_email ON application.users(email);
