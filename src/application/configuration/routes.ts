@@ -1,5 +1,5 @@
-import { AuthController } from "@application/controllers/auth-controller.js";
-import { UserController } from "@application/controllers/user-controller.js";
+import { AuthController } from "@application/controllers/auth.js";
+import { UserController } from "@application/controllers/user.js";
 import { Application } from "@application/index.js";
 
 import type { Server } from "@application/index.js";

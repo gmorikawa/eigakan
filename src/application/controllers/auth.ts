@@ -5,7 +5,7 @@ import { Environment } from "@application/configuration/environment.js";
 import type { DatabaseClient } from "@infrastructure/database/client.js";
 import { BcryptPasswordHasher } from "@infrastructure/password-hasher/bcrypt.js";
 import { JwtTokenGenerator } from "@infrastructure/token-generator/jwt.js";
-import { PostgresUserRepository } from "@infrastructure/database/postgres/repositories/user-repository.js";
+import { PostgresUserRepository } from "@infrastructure/database/postgres/repositories/user.js";
 
 import { AuthService } from "@features/authentication/service.js";
 

@@ -2,7 +2,7 @@ import type { Response } from "@application/types/response.js";
 import type { Request } from "@application/types/request.js";
 
 import type { DatabaseClient } from "@infrastructure/database/client.js";
-import { PostgresUserRepository } from "@infrastructure/database/postgres/repositories/user-repository.js";
+import { PostgresUserRepository } from "@infrastructure/database/postgres/repositories/user.js";
 import { BcryptPasswordHasher } from "@infrastructure/password-hasher/bcrypt.js";
 
 import { UserService } from "@features/user/service.js";
