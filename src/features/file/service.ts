@@ -1,3 +1,5 @@
+import type { Readable } from "stream";
+
 import type { ID } from "@shared/types/id.js";
 import { EntityNotFoundError } from "@shared/errors.js";
 
@@ -7,6 +9,8 @@ import type { NewFile, File, NewFileType, FileType } from "@features/file/entity
 import type { FileRepository, FileTypeRepository } from "@features/file/repository.js";
 import { UnauthorizedAccessError } from "@features/authentication/exceptions.js";
 import { UserRole } from "@features/user/enums.js";
+import { FileState } from "@features/file/enums.js";
+import { FileNotAvailableError, FileUploadingError } from "@features/file/exceptions.js";
 
 export class FileService {
     constructor(
@@ -89,5 +93,41 @@ export class FileService {
         }
 
         return this.typeRepository.delete(id);
+    }
+
+    public async store(id: ID, data: Readable) {
+        const file = await this.repository.findById(id);
+
+        if (!file) {
+            throw new EntityNotFoundError("File", id);
+        }
+
+        await this.changeState(id, FileState.UPLOADING);
+        return this.storage.write(file.path, data)
+            .then(async () => {
+                return this.changeState(id, FileState.AVAILABLE);
+            })
+            .catch(async (error) => {
+                await this.changeState(id, FileState.CORRUPTED);
+                throw new FileUploadingError(file.filename, error.message);
+            });
+    }
+
+    public async retrieve(id: ID) {
+        const file = await this.repository.findById(id);
+
+        if (!file) {
+            throw new EntityNotFoundError("File", id);
+        }
+
+        if (file.state !== FileState.AVAILABLE) {
+            throw new FileNotAvailableError(file.filename);
+        }
+
+        return this.storage.read(file.path);
+    }
+
+    private async changeState(id: ID, state: FileState) {
+        return this.repository.updateState(id, state);
     }
 }

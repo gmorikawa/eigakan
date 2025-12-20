@@ -6,6 +6,7 @@ import type { Path } from "@features/file/entity.js";
 
 export interface FileRepository extends Repository<ID, File, NewFile> {
     findByFilePath(filepath: Path, excludeIds?: ID[]): Promise<File | null>;
+    updateState(id: ID, state: string): Promise<File>;
 }
 
 export interface FileTypeRepository extends Repository<ID, FileType, NewFileType> {

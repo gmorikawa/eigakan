@@ -44,9 +44,19 @@ export class PostgresFileRepository implements FileRepository {
             });
     }
 
-    public async update(id: ID, file: Partial<NewFile>): Promise<File | null> {
-        const query = "UPDATE application.files SET path = $1, filename = $2, type_id = $3, state = $4 WHERE id = $5 RETURNING *";
-        const params = [file.path, file.filename, file.type?.id, file.state as FileState, id];
+    public async update(id: ID, file: File): Promise<File | null> {
+        const query = "UPDATE application.files SET path = $1, filename = $2, type_id = $3 WHERE id = $4 RETURNING *";
+        const params = [file.path, file.filename, file.type?.id, id];
+
+        return this.client.query(query, params)
+            .then((value: any) => {
+                return value?.shift() as File;
+            });
+    }
+
+    public async updateState(id: ID, state: string): Promise<File> {
+        const query = "UPDATE application.files SET state = $1 WHERE id = $2 RETURNING *";
+        const params = [state, id];
 
         return this.client.query(query, params)
             .then((value: any) => {
