@@ -35,7 +35,8 @@
 ### Language
 
 * _id_: __primary key, UUID, not null__;
-* _name_: __varchar(127), not null, unique__;
+* _name_: __varchar(127), not null__;
+* _iso\_code_: __varchar(7), not null, unique__;
 
 ### Video
 
