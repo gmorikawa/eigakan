@@ -23,8 +23,20 @@ export class FileService {
         return this.repository.findAll();
     }
 
+    public async getAllTypes() {
+        return this.typeRepository.findAll();
+    }
+
     public async getById(id: ID) {
         return this.repository.findById(id);
+    }
+
+    public async getTypeById(id: ID) {
+        return this.typeRepository.findById(id);
+    }
+
+    public async getTypeByExtension(extension: string) {
+        return this.typeRepository.findByExtension(extension);
     }
 
     public async create(loggedUser: LoggedUser, data: NewFile) {

@@ -5,8 +5,9 @@ import type { Request } from "@application/types/request.js";
 import type { Response } from "@application/types/response.js";
 
 import type { DatabaseClient } from "@infrastructure/database/client.js";
-import { PostgresFileRepository, PostgresFileTypeRepository } from "@infrastructure/database/postgres/repositories/file.js";
 import { LocalStorage } from "@infrastructure/storage/local.js";
+import { PostgresFileRepository } from "@infrastructure/database/postgres/repositories/file.js";
+import { PostgresFileTypeRepository } from "@infrastructure/database/postgres/repositories/file-type.js";
 
 import { FileService } from "@features/file/service.js";
 import { FileState } from "@features/file/enums.js";
@@ -67,5 +68,47 @@ export class FileController {
         response.setHeader("Content-Type", file.type.mimeType);
 
         readStream.pipe(response);
+    }
+
+    public async getAllTypes(request: Request, response: Response) {
+        const fileTypes = await this.service.getAllTypes();
+
+        response.json(fileTypes);
+    }
+
+    public async getTypeById(request: Request, response: Response) {
+        const { id } = request.params;
+
+        const fileType = await this.service.getTypeById(id);
+
+        response.json(fileType);
+    }
+
+    public async createType(request: Request, response: Response) {
+        const loggedUser = request.user!;
+        const fileType = request.body;
+
+        const createdFileType = await this.service.createType(loggedUser, fileType);
+
+        response.status(201).json(createdFileType);
+    }
+
+    public async updateType(request: Request, response: Response) {
+        const loggedUser = request.user!;
+        const { id } = request.params;
+        const fileType = request.body;
+
+        const updatedFileType = await this.service.updateType(loggedUser, id, fileType);
+
+        response.json(updatedFileType);
+    }
+
+    public async deleteType(request: Request, response: Response) {
+        const loggedUser = request.user!;
+        const { id } = request.params;
+
+        const result = await this.service.deleteType(loggedUser, id);
+
+        response.json({ success: result });
     }
 }
