@@ -1,5 +1,6 @@
 import { AuthController } from "@application/controllers/auth.js";
 import { FileController } from "@application/controllers/file.js";
+import { LanguageController } from "@application/controllers/language.js";
 import { UserController } from "@application/controllers/user.js";
 import { Application } from "@application/index.js";
 
@@ -29,8 +30,20 @@ function buildFileRoutes(app: Server) {
     app.get("/api/files/:id/download", controller.download.bind(controller));
 }
 
+function buildLanguageRoutes(app: Server) {
+    const controller = new LanguageController(Application.database);
+
+    app.get("/api/languages", controller.getAll.bind(controller));
+    app.get("/api/languages/:id", controller.getById.bind(controller));
+    app.get("/api/languages/code/:code", controller.getByCode.bind(controller));
+    app.post("/api/languages", controller.create.bind(controller));
+    app.put("/api/languages/:id", controller.update.bind(controller));
+    app.delete("/api/languages/:id", controller.delete.bind(controller));
+}
+
 export async function initRoutes(app: Server) {
     buildAuthRoutes(app);
     buildUserRoutes(app);
     buildFileRoutes(app);
+    buildLanguageRoutes(app);
 }
