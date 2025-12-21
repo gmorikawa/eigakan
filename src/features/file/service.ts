@@ -102,8 +102,10 @@ export class FileService {
             throw new EntityNotFoundError("File", id);
         }
 
+        const fullpath = `${file.path}/${file.filename}`;
+
         await this.changeState(id, FileState.UPLOADING);
-        return this.storage.write(file.path, data)
+        return this.storage.write(fullpath, data)
             .then(async () => {
                 return this.changeState(id, FileState.AVAILABLE);
             })
@@ -124,7 +126,9 @@ export class FileService {
             throw new FileNotAvailableError(file.filename);
         }
 
-        return this.storage.read(file.path);
+        const fullpath = `${file.path}/${file.filename}`;
+
+        return this.storage.read(fullpath);
     }
 
     private async changeState(id: ID, state: FileState) {

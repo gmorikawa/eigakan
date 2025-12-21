@@ -1,4 +1,5 @@
 import { AuthController } from "@application/controllers/auth.js";
+import { FileController } from "@application/controllers/file.js";
 import { UserController } from "@application/controllers/user.js";
 import { Application } from "@application/index.js";
 
@@ -21,7 +22,15 @@ function buildUserRoutes(app: Server) {
     app.delete("/api/users/:id", controller.delete.bind(controller));
 }
 
+function buildFileRoutes(app: Server) {
+    const controller = new FileController(Application.database);
+
+    app.post("/api/files/:id/upload", controller.upload.bind(controller));
+    app.get("/api/files/:id/download", controller.download.bind(controller));
+}
+
 export async function initRoutes(app: Server) {
     buildAuthRoutes(app);
     buildUserRoutes(app);
+    buildFileRoutes(app);
 }
