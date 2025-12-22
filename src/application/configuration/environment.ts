@@ -11,5 +11,7 @@ export const Environment = Object.freeze({
     DATABASE_PORT: Number(process.env.DATABASE_PORT) ?? 3010,
     DATABASE_USER: process.env.DATABASE_USER ?? "",
     DATABASE_PASSWORD: process.env.DATABASE_PASSWORD ?? "",
-    DATABASE_NAME: process.env.DATABASE_NAME ?? ""
+    DATABASE_NAME: process.env.DATABASE_NAME ?? "",
+
+    LOCAL_STORAGE_ROOT_PATH: process.env.LOCAL_STORAGE_ROOT_PATH ?? "/var/eigakan/storage",
 });

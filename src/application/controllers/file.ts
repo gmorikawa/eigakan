@@ -3,6 +3,7 @@ import busboy from "busboy";
 
 import type { Request } from "@application/types/request.js";
 import type { Response } from "@application/types/response.js";
+import { Environment } from "@application/configuration/environment.js";
 
 import type { DatabaseClient } from "@infrastructure/database/client.js";
 import { LocalStorage } from "@infrastructure/storage/local.js";
@@ -18,7 +19,7 @@ export class FileController {
     constructor(database: DatabaseClient) {
         const repository = new PostgresFileRepository(database);
         const typeRepository = new PostgresFileTypeRepository(database);
-        const storage = new LocalStorage("/home/gmorikawa/Library");
+        const storage = new LocalStorage(Environment.LOCAL_STORAGE_ROOT_PATH);
         this.service = new FileService(repository, typeRepository, storage);
     }
 
