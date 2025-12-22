@@ -42,7 +42,7 @@
 
 * _id_: __primary key, UUID, not null__;
 * _title_: __varchar(127), not null__;
-* _description_: __varchar(127)__;
+* _description_: __varchar(1023)__;
 * _released\_at_: __date__;
 * _language_: __Language__;
 * _file_: __File, not null__;
