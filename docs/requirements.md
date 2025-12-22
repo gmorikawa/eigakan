@@ -73,7 +73,7 @@
 
 ## Series Management
 
-1. Series are a group of videos that are divided in seasons and episodes.
+1. Series are groups of videos that are composed of one or many seasons, seasons are composed of one or many episodes, and episodes are videos.
 2. To register a series the following information may be given:
     1. Title (required)
     2. Description

@@ -66,13 +66,6 @@
 * _directors_: __Person, list__;
 * _actors_: __Person, list__;
 
-### Season
-
-* _id_: __primary key, UUID, not null__;
-* _title_: __varchar(127), not null__;
-* _released\_at_: __date__;
-* _description_: __varchar(127)__;
-
 ### Series
 
 * _id_: __primary key, UUID, not null__;
@@ -81,7 +74,19 @@
 * _released\_at_: __date__;
 * _language_: __Language__;
 * _tags_:  __varchar(255)__;
-* _season_: __Season, list not null__
+
+### Season
+
+* _id_: __primary key, UUID, not null__;
+* _title_: __varchar(127), not null__;
+* _released\_at_: __date__;
+* _description_: __varchar(127)__;
+* _series_: __Series, not null__;
+
+### Episode
+
+* _video\_id_: __Video, not null__;
+* _season\_id_: __Season, not null__;
 
 ## Enums
 
