@@ -47,6 +47,11 @@
 3. The client must provide a hash (e.g., SHA-256) of the uploaded file so the server can verify integrity.
 4. _Admin_ and _editors_ may upload and download files; _viewer_ can only visualize or download them.
 5. The storage system does not enforce directory structures; files are identified by generated keys.
+6. _File types_ can be registered by the _admin_, and they indicates which types are handled by the system.
+7. _File types_ can be registered by providing the following information:
+    1. Extension (required and unique)
+    2. Mime Type (required)
+8. _File types_ are detected by the extension in the filename.
 
 ## Video Management
 
