@@ -1,4 +1,4 @@
-CREATE TYPE application.UserRole AS ENUM ('ADMIN', 'CREATOR', 'VIEWER');
+CREATE TYPE application.UserRole AS ENUM ('ADMIN', 'EDITOR', 'VIEWER');
 CREATE TYPE application.UserStatus AS ENUM ('ACTIVE', 'BLOCKED');
 
 CREATE TABLE application.users (

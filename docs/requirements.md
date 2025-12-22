@@ -2,8 +2,8 @@
 
 ## Autorization and Authentication
 
-1. There are three roles for users in the system: the _admin_, the _creator_, and the _viewer_.
-2. The _admin_ has full permissions while the _viewer_ can only access content without doing modifications. The _creator_ can do some modifications in data.
+1. There are three roles for users in the system: the _admin_, the _editor_, and the _viewer_.
+2. The _admin_ has full permissions while the _viewer_ can only access content without doing modifications. The _editor_ can do some modifications in data.
 3. All users must have:
     1. A __unique username__.
     2. A __secret password__.
@@ -31,27 +31,27 @@
 1. __Admin__:
     1. Full access to all system features, configuration, and data.
     2. Cannot be deleted.
-2. __Creator__:
+2. __Editor__:
     1. Can create and modify videos information, upload files.
     2. Cannot modify administrative configuration settings.
 3. __Viewer__:
     1. Can view all videos files.
     2. Can only modify their own user-related data (profile, personal lists).
 4. Role hierarchy is cumulative:
-    _admin_ > _creator_ > _viewer_ (each role inherits the permissions of the lower role).
+    _admin_ > _editor_ > _viewer_ (each role inherits the permissions of the lower role).
 
 ## File Storage
 
 1. The storage is a separated service which provides a interface for the available actions.
 2. The maximum upload size by default is 50mb per file. It is configurable by _admin_.
 3. The client must provide a hash (e.g., SHA-256) of the uploaded file so the server can verify integrity.
-4. _Admin_ and _creators_ may upload and download files; _viewer_ can only visualize or download them.
+4. _Admin_ and _editors_ may upload and download files; _viewer_ can only visualize or download them.
 5. The storage system does not enforce directory structures; files are identified by generated keys.
 
 ## Video Management
 
 1. The system should handle different kinds of media: youtube videos, movies, series, animes, etc.
-2. __Videos__ and __Playlists__ can be added by _admins_ and _creators_, and are visible to all users.
+2. __Videos__ and __Playlists__ can be added by _admins_ and _editors_, and are visible to all users.
 4. To register a video, the following information may be given:
     1. Title (required)
     2. Description

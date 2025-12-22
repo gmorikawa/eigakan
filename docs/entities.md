@@ -103,7 +103,7 @@
 ### UserRole
 
 * _ADMIN_
-* _CREATOR_
+* _EDITOR_
 * _VIEWER_
 
 ### FileState
