@@ -35,7 +35,6 @@ export class PostgresVideoRepository implements VideoRepository {
 
         return this.client.query(query)
             .then((values: any[]) => {
-                console.log("Fetched videos values:", values);
                 return values.map((value) => this.mapToEntityWithJoin(value));
             });
     }
