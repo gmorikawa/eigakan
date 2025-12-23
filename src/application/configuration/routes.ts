@@ -2,6 +2,7 @@ import { AuthController } from "@application/controllers/auth.js";
 import { FileController } from "@application/controllers/file.js";
 import { LanguageController } from "@application/controllers/language.js";
 import { UserController } from "@application/controllers/user.js";
+import { VideoController } from "@application/controllers/video.js";
 import { Application } from "@application/index.js";
 
 import type { Server } from "@application/index.js";
@@ -41,9 +42,22 @@ function buildLanguageRoutes(app: Server) {
     app.delete("/api/languages/:id", controller.delete.bind(controller));
 }
 
+function buildVideoRoutes(app: Server) {
+    const controller = new VideoController(Application.database)
+
+    app.get("/api/videos", controller.getAll.bind(controller));
+    app.get("/api/videos/:id", controller.getById.bind(controller));
+    app.post("/api/videos", controller.create.bind(controller));
+    app.put("/api/videos/:id", controller.update.bind(controller));
+    app.delete("/api/videos/:id", controller.delete.bind(controller));
+    app.post("/api/videos/:id/upload", controller.upload.bind(controller));
+    app.get("/api/videos/:id/download", controller.download.bind(controller));
+}
+
 export async function initRoutes(app: Server) {
     buildAuthRoutes(app);
     buildUserRoutes(app);
     buildFileRoutes(app);
     buildLanguageRoutes(app);
+    buildVideoRoutes(app);
 }

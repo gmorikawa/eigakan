@@ -11,3 +11,17 @@ export class FileNotAvailableError extends Error {
         this.name = "FileNotAvailableError";
     }
 }
+
+export class ExtensionNotFoundError extends Error {
+    constructor() {
+        super("The file extension could not be determined.");
+        this.name = "ExtensionNotFoundError";
+    }
+}
+
+export class UnsupportedFileTypeError extends Error {
+    constructor(extension: string) {
+        super(`The file type with extension '${extension}' is not supported.`);
+        this.name = "UnsupportedFileTypeError";
+    }
+}
