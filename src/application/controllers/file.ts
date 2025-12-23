@@ -45,7 +45,7 @@ export class FileController {
 
         request.pipe(bb);
 
-        this.service.store(id, passThrough)
+        this.service.store(id, passThrough);
     }
 
     public async download(request: Request, response: Response) {
