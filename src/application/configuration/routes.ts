@@ -29,6 +29,11 @@ function buildFileRoutes(app: Server) {
 
     app.post("/api/files/:id/upload", controller.upload.bind(controller));
     app.get("/api/files/:id/download", controller.download.bind(controller));
+    app.get("/api/files/types", controller.getAllTypes.bind(controller));
+    app.get("/api/files/types/:id", controller.getTypeById.bind(controller));
+    app.post("/api/files/types", controller.createType.bind(controller));
+    app.put("/api/files/types/:id", controller.updateType.bind(controller));
+    app.delete("/api/files/types/:id", controller.deleteType.bind(controller));
 }
 
 function buildLanguageRoutes(app: Server) {
