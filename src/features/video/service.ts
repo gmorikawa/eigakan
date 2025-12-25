@@ -83,6 +83,12 @@ export class VideoService {
             throw new UnsupportedFileTypeError(extension);
         }
 
+        const video = await this.repository.findById(id);
+
+        if (!video) {
+            throw new EntityNotFoundError("Video", id);
+        }
+
         const file = await this.fileService.create(loggedUser, {
             filename: this.generateFilename(id.toString()),
             path: "/videos",
@@ -90,6 +96,7 @@ export class VideoService {
             type: fileType
         });
 
+        await this.repository.update(id, { ...video, file: file });
         await this.fileService.store(file.id, stream);
     }
 
