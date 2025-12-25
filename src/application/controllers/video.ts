@@ -95,8 +95,10 @@ export class VideoController {
 
     public async download(request: Request, response: Response) {
         const { id } = request.params;
+        const range = request.headers.range;
 
         const video = await this.service.getById(id);
+        const bytes = await this.service.getFileBytes(id);
 
         if (!video) {
             response.status(404).json({ error: "Video not found" });
@@ -108,10 +110,20 @@ export class VideoController {
             return;
         }
 
-        const readStream = await this.service.retrieveFile(id);
+        const parts = range ? range.replace(/bytes=/, "").split("-") : [];
+        const start = parts[0] ? parseInt(parts[0], 10) : 0;
+        const end = parts[1] ? parseInt(parts[1], 10) : bytes - 1;
+        const chunkSize = (end - start) + 1;
 
-        response.setHeader("Content-Disposition", `attachment; filename="${video.file.filename}"`);
-        response.setHeader("Content-Type", video.file.type.mimeType);
+        const readStream = await this.service.retrieveFile(id, { rangeStart: start, rangeEnd: end });
+
+        response.writeHead(206, {
+            "Content-Range": `bytes ${start}-${end}/${bytes}`,
+            "Accept-Ranges": "bytes",
+            "Content-Disposition": `attachment; filename="${video.file.filename}"`,
+            "Content-Length": chunkSize,
+            "Content-Type": video.file.type.mimeType,
+        });
 
         readStream.pipe(response);
     }

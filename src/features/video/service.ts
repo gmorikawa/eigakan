@@ -12,6 +12,7 @@ import { UnauthorizedAccessError } from "@features/authentication/exceptions.js"
 import { UserRole } from "@features/user/enums.js";
 import { FileState } from "@features/file/enums.js";
 import { ExtensionNotFoundError, UnsupportedFileTypeError } from "@features/file/exceptions.js";
+import type { StorageReadOptions } from "@features/file/storage.js";
 
 export class VideoService {
     constructor(
@@ -100,7 +101,7 @@ export class VideoService {
         await this.fileService.store(file.id, stream);
     }
 
-    public async retrieveFile(id: ID) {
+    public async retrieveFile(id: ID, options?: StorageReadOptions) {
         const video = await this.repository.findById(id);
 
         if (!video) {
@@ -111,7 +112,21 @@ export class VideoService {
             throw new EntityNotFoundError("File for Video", id);
         }
 
-        return this.fileService.retrieve(video.file.id);
+        return this.fileService.retrieve(video.file.id, options);
+    }
+
+    public async getFileBytes(id: ID) {
+        const video = await this.repository.findById(id);
+
+        if (!video) {
+            throw new EntityNotFoundError("Video", id);
+        }
+
+        if (!video.file) {
+            throw new EntityNotFoundError("File for Video", id);
+        }
+
+        return this.fileService.getFileSize(video.file.id);
     }
 
     private generateFilename(title: string) {

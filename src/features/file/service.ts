@@ -4,7 +4,7 @@ import type { ID } from "@shared/types/id.js";
 import { EntityNotFoundError } from "@shared/errors.js";
 
 import type { LoggedUser } from "@features/user/entity.js";
-import type { Storage } from "@features/file/storage.js";
+import type { Storage, StorageReadOptions } from "@features/file/storage.js";
 import type { NewFile, File, NewFileType, FileType } from "@features/file/entity.js";
 import type { FileRepository, FileTypeRepository } from "@features/file/repository.js";
 import { UnauthorizedAccessError } from "@features/authentication/exceptions.js";
@@ -127,7 +127,7 @@ export class FileService {
             });
     }
 
-    public async retrieve(id: ID) {
+    public async retrieve(id: ID, options?: StorageReadOptions) {
         const file = await this.repository.findById(id);
 
         if (!file) {
@@ -140,7 +140,23 @@ export class FileService {
 
         const fullpath = `${file.path}/${file.filename}`;
 
-        return this.storage.read(fullpath);
+        return this.storage.read(fullpath, options);
+    }
+
+    public async getFileSize(id: ID): Promise<number> {
+        const file = await this.repository.findById(id);
+
+        if (!file) {
+            throw new EntityNotFoundError("File", id);
+        }
+
+        if (file.state !== FileState.AVAILABLE) {
+            throw new FileNotAvailableError(file.filename);
+        }
+
+        const fullpath = `${file.path}/${file.filename}`;
+
+        return this.storage.getBytes(fullpath);
     }
 
     private async changeState(id: ID, state: FileState) {
