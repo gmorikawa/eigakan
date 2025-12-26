@@ -28,11 +28,25 @@ export class FileService {
     }
 
     public async getById(id: ID) {
-        return this.repository.findById(id);
+        return this.repository.findById(id)
+            .then((file: File | null) => {
+                if (!file) {
+                    throw new EntityNotFoundError("File", id);
+                }
+
+                return file;
+            });
     }
 
     public async getTypeById(id: ID) {
-        return this.typeRepository.findById(id);
+        return this.typeRepository.findById(id)
+            .then((type: FileType | null) => {
+                if (!type) {
+                    throw new EntityNotFoundError("File Type", id);
+                }
+
+                return type;
+            });
     }
 
     public async getTypeByExtension(extension: string) {

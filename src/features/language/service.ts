@@ -18,7 +18,14 @@ export class LanguageService {
     }
 
     public async getById(id: ID) {
-        return this.repository.findById(id);
+        return this.repository.findById(id)
+            .then((language: Language | null) => {
+                if (!language) {
+                    throw new EntityNotFoundError("Language", id);
+                }
+
+                return language;
+            });
     }
 
     public async getByCode(code: LanguageISOCode) {

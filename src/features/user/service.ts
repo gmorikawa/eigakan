@@ -19,7 +19,14 @@ export class UserService {
     }
 
     public async getById(id: ID) {
-        return this.repository.findById(id);
+        return this.repository.findById(id)
+            .then((user: User | null) => {
+                if (!user) {
+                    throw new EntityNotFoundError("User", id);
+                }
+
+                return user;
+            });
     }
 
     public async getByUsername(username: string) {

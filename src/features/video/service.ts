@@ -25,7 +25,14 @@ export class VideoService {
     }
 
     public async getById(id: ID) {
-        return this.repository.findById(id);
+        return this.repository.findById(id)
+            .then((video: Video | null) => {
+                if (!video) {
+                    throw new EntityNotFoundError("Video", id);
+                }
+
+                return video;
+            });
     }
 
     public async create(loggedUser: LoggedUser, data: NewVideo) {

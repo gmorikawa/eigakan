@@ -11,7 +11,6 @@ import { PostgresFileRepository } from "@infrastructure/database/postgres/reposi
 import { PostgresFileTypeRepository } from "@infrastructure/database/postgres/repositories/file-type.js";
 
 import { FileService } from "@features/file/service.js";
-import { FileState } from "@features/file/enums.js";
 
 export class FileController {
     private service: FileService;
@@ -52,17 +51,6 @@ export class FileController {
         const { id } = request.params;
 
         const file = await this.service.getById(id);
-
-        if (!file) {
-            response.status(404).json({ error: "File not found" });
-            return;
-        }
-
-        if (file.state !== FileState.AVAILABLE) {
-            response.status(400).json({ error: "File is not available for download" });
-            return;
-        }
-
         const readStream = await this.service.retrieve(id);
 
         response.setHeader("Content-Disposition", `attachment; filename="${file.filename}"`);
@@ -91,7 +79,7 @@ export class FileController {
 
         const createdFileType = await this.service.createType(loggedUser, fileType);
 
-        response.status(201).json(createdFileType);
+        response.json(createdFileType);
     }
 
     public async updateType(request: Request, response: Response) {

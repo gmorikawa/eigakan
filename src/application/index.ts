@@ -5,6 +5,7 @@ import { initMigrations } from "@application/configuration/migration.js";
 import { initRoutes } from "@application/configuration/routes.js";
 import { authentication } from "@application/middlewares/authentication.js";
 import { cors } from "@application/middlewares/cors.js";
+import { errorHandling } from "@application/middlewares/error.js";
 
 import type { DatabaseClient } from "@infrastructure/database/client.js";
 
@@ -33,6 +34,8 @@ export class Application {
         this._database = await initDatabase();
         await initMigrations(this._database);
         await initRoutes(this._app);
+
+        this._app.use(errorHandling);
 
         const port = 3020;
         this._app.listen(port, () => {
